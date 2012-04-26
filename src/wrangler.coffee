@@ -58,7 +58,7 @@ window.wrangle = (model, template, options) ->
 			@model[index] = property
 		@update()
 
-	# Update the DOM
+	# Do an inital update of the DOM
 	wrangler.update()
 
 	# We're done!
