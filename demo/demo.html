@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Wrangler demo</title>
+
+	<script src="../wrangler.js"></script>
+	<script>
+
+	// Data
+
+	var user = {
+		fullname: 'Juan Lucio',
+		username: 'jlucio',
+		id: 1337
+	};
+
+	var tasks = [
+		{
+			title: "Eat an enormous cake",
+			completed: false
+		},
+		{
+			title: "Destroy the moon",
+			completed: false
+		},
+		{
+			title: "Make a thing called Wranglo",
+			completed: true
+		}
+	];
+
+	// Time to wrangle, boys
+
+	wrangle(user, "greeting-template");
+	wrangle(tasks, "tasks-template");
+
+	</script>
+
+</head>
+<body>
+
+	<h1 id="greeting-template">Why hello there, {{fullname}}</h1>
+	<h2>you're looking dashing</h2>
+
+	<ul id="tasks-template">
+		<li>{{name}}, completed is {{completed}}</li>
+	</ul>
+
+</body>
+</html>
