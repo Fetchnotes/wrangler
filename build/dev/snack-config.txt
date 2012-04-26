@@ -1,0 +1,2 @@
+../../src/milk.coffee       ./js.sh
+../../src/wrangler.coffee   ./js.sh
