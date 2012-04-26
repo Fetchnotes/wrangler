@@ -26,18 +26,7 @@ SOFTWARE.
 
 window.wrangle = (model, template, options) ->
 
-	# If the page hasn't loaded, then let's wait a bit
-	if document.readyState isnt 'complete'
-		if window.addEventListener
-			window.addEventListener 'load', ->
-				window.wrangle(model, template, options)
-			, false
-		else
-			window.attachEvent 'onload', ->
-				window.wrangle(model, template, options)
-		return
-
-	# Get the object we'll be returning
+	# Get the wrangler object we'll be returning
 	wrangler = {}
 
 	# Give this wrangler the model
@@ -66,10 +55,10 @@ window.wrangle = (model, template, options) ->
 		if value?
 			@model[index][property] = value
 		else
-			@model[property] = value
+			@model[index] = property
 		@update()
 
-	# Do an initial update
+	# Update the DOM
 	wrangler.update()
 
 	# We're done!
