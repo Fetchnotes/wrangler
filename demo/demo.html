@@ -9,13 +9,13 @@
 
 	// Data
 
-	var user = {
+	window.user = {
 		fullname: 'Juan Lucio',
 		username: 'jlucio',
 		id: 1337
 	};
 
-	var tasks = [
+	window.tasks = [
 		{
 			title: "Eat an enormous cake",
 			completed: false
@@ -32,8 +32,15 @@
 
 	// Time to wrangle, boys
 
-	wrangle(user, "greeting-template");
-	wrangle(tasks, "tasks-template");
+	window.onload = function() {
+		window.greetingWrangler = wrangle(window.user, "greeting-template");
+		window.tasksWrangler = wrangle(window.tasks, "tasks-template");
+	};
+
+	setTimeout(function() {
+		window.greetingWrangler.set('fullname', 'Leonardo da Vinci');
+		window.tasksWrangler.set(0, 'completed', true);
+	}, 2000);
 
 	</script>
 
