@@ -40,6 +40,14 @@ window.wrangle = (model, template, options) ->
 	wrangler.element = template
 	wrangler.template = template.innerHTML
 
+	# Set a property and then update
+	wrangler.set = (index, property, value) ->
+		if value?
+			@model[index][property] = value
+		else
+			@model[index] = property
+		@update()
+
 	# Update the DOM
 	wrangler.update = ->
 		if @model instanceof Array
@@ -49,14 +57,6 @@ window.wrangle = (model, template, options) ->
 			@element.innerHTML = output
 		else
 			@element.innerHTML = window.Milk.render(@template, @model)
-
-	# Set a property and then update
-	wrangler.set = (index, property, value) ->
-		if value?
-			@model[index][property] = value
-		else
-			@model[index] = property
-		@update()
 
 	# Do an inital update of the DOM
 	wrangler.update()
