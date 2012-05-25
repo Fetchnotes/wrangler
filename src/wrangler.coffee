@@ -1,6 +1,11 @@
 ###
 
 Wrangler
+by Evan Hahn
+
+Get your got'dang data into your got'dang webpage and stop worrying about it.
+
+*******************************************************************************
 
 Copyright (c) 2012, Fetchnotes LLC
 
@@ -24,32 +29,64 @@ SOFTWARE.
 
 ###
 
-window.wrangle = (model, template, options) ->
+class window.Wrangler
 
-	# Get the wrangler object we'll be returning
-	wrangler = {}
+	# Constructor.
+	constructor: (@model, template, options) ->
 
-	# Give this wrangler the model
-	wrangler.model = model
+		# Assigns the template and the DOM element and accepts jQuery/Zepto, a
+		# string ID, or just a straight DOM element.
+		if ($) and (template instanceof $)
+			template = template[0]
+		if (typeof template is 'string') or (template instanceof String)
+			template = document.getElementById(template)
+		@el = template
+		@template = @el.innerHTML
 
-	# Get template element
-	if ($?) and (template instanceof $)
-		template = template[0]
-	if (typeof template is 'string') or (template instanceof String)
-		template = document.getElementById(template)
-	wrangler.element = template
-	wrangler.template = template.innerHTML
+		# By default, bind the change event to an update.
+		Wrangler.addEvent(@el, 'change', @update)
 
-	# Set a property and then update
-	wrangler.set = (index, property, value) ->
-		if value?
-			@model[index][property] = value
-		else
-			@model[index] = property
+		# Initial DOM update.
 		@update()
 
-	# Update the DOM
-	wrangler.update = ->
+	# Get a property.
+	get: (property, escaped = true) ->
+
+		# Who owns the property?
+		if this[property]
+			result = this[property]
+			scope = this
+		else
+			result = @model[property]
+			scope = @model
+
+		# If it's a function, return its output
+		if typeof result is 'function'
+			result = result.call(scope)
+
+		# Escape HTML if I should
+		if escaped
+			result = Wrangler.escape result
+
+		# All done!
+		result
+
+	# Set a property of the model and then update.
+	# Can batch set array elements.
+	set: (property, value) ->
+		if (property.valueOf() is 'number') and (@model instanceof Array)
+			m[property] = value for m in @model
+		@model[property] = value
+		@update()
+
+	# Destroy me.
+	destroy: (alsoDestroyModel = false) ->
+		@el.parentNode.removeChild(@el)
+		delete @el
+		delete @model if alsoDestroyModel
+
+	# Update DOM.
+	update: ->
 		if @model instanceof Array
 			output = ''
 			for m in @model
@@ -58,8 +95,13 @@ window.wrangle = (model, template, options) ->
 		else
 			@element.innerHTML = window.Milk.render(@template, @model)
 
-	# Do an inital update of the DOM
-	wrangler.update()
+# Add an event to the DOM.
+Wrangler.addEvent = (element, name, callback) ->
+	if element.addEventListener
+		element.addEventListener(name, callback, false)
+	else if element.attachEvent
+		element.attachEvent("on#{name}", callback)
 
-	# We're done!
-	return wrangler
+# Escape some text to safe HTML.
+Wrangler.escape = (html) ->
+	html.replace(/&/g, '&amp;').replace(/</g, "&lt;").replace(/>/g, '&gt;').replace(/\ \ /g, '&nbsp;&nbsp;')
