@@ -31,9 +31,9 @@ All of these are methods of a `Wrangler` instance.
 
   Sets a property of the model (NOT of the Wrangler) and updates. Has some special stuff if your model is an array:
 
-      // ... some logic for defining tasks ...
-      tasksWrangler.set(0, { name: "Say hello to the world", done: false });
-      tasksWrangler.set("done", true);
+        // ... some logic for defining tasks ...
+        tasksWrangler.set(0, { name: "Say hello to the world", done: false });
+        tasksWrangler.set("done", true);
 
 * `destroy(alsoDestroyModel)`
 
